@@ -1,6 +1,7 @@
 import nltk
 import pandas as pd
 import re
+from nltk.corpus import wordnet
 
 """
 text = "This is an english text, it is used as an example of the text that will be taken from the files (I think" \
@@ -45,8 +46,17 @@ for file in docs_path:
         if isinstance(rev,float):
             continue
 
-        #conversione del testo in token
-        rev_tokens = nltk.word_tokenize(rev.lower())
+        # Rende minuscolo
+        rev = rev.lower()
+        # Rimuove URL
+        rev = re.sub(r'http\S+', '', rev)
+        # Rimuove menzioni e hashtag
+        rev = re.sub(r'@\w+|#\w+', '', rev)
+        # Rimuove simboli inutili
+        rev = re.sub(r'[a-z0-9]+', '', rev)
+
+        # Conversione del testo in token
+        rev_tokens = nltk.word_tokenize(rev)
 
         # Rimozione delle stopwords e parole composte da una lettera
         filtered_tokens = [ token for token in rev_tokens if token not in stop_words and len(token) > 1 ]

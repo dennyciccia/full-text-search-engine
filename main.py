@@ -6,7 +6,7 @@ DOC_PATH = 'docs/csgo.csv'
 
 if __name__ == "__main__":
     index = InvertedIndex(INDEX_DIR)
-    if not index.exist:
+    if not index.exists:
         print("Costruzione inverted index...")
         df = pd.read_csv(DOC_PATH, header=0, sep=';')
         documents = [(row['id'], row['text']) for _, row in df.iterrows()]

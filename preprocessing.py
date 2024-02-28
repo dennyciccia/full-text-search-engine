@@ -38,7 +38,7 @@ def preprocess_document(text):
         # Rimuove menzioni e hashtag
         text = re.sub(r'@\w+|#\w+', '', text)
         # Rimuove simboli inutili
-        text = re.sub(r'[a-z0-9]+', '', text)
+        text = re.sub(r'[^a-z0-9 ]+', '', text)
 
         # Conversione del testo in token
         text_tokens = nltk.word_tokenize(text)
@@ -56,3 +56,5 @@ def preprocess_document(text):
             filtered_tokens = [ lemmatizer.lemmatize(t[0], get_wordnet_pos(t[1])) for t in pos_tags ]
 
         return filtered_tokens
+    else:
+        return []

@@ -1,25 +1,5 @@
 import nltk
-import pandas as pd
 import re
-from nltk.corpus import wordnet
-
-"""
-text = "This is an english text, it is used as an example of the text that will be taken from the files (I think" \
-        "CSV file), because now I don't have the document collection so for now it's ok."
-"""
-
-# Converte Tag NLTK in Tag Wordnet
-def get_wordnet_pos(tag):
-    if tag.startswith('J'):
-        return wordnet.ADJ
-    elif tag.startswith('V'):
-        return wordnet.VERB
-    elif tag.startswith('N'):
-        return wordnet.NOUN
-    elif tag.startswith('R'):
-        return wordnet.ADV
-    else:
-        return wordnet.NOUN
 
 # inizializzazione
 STEMMING = True
@@ -30,36 +10,41 @@ nltk.download("stopwords")
 nltk.download('averaged_perceptron_tagger')
 nltk.download('wordnet')
 
-docs_path = ["docs/elden_ring.csv"] #,"docs/csgo.csv"]
 stop_words = set(nltk.corpus.stopwords.words('english'))
 stemmer = nltk.SnowballStemmer("english")
 lemmatizer = nltk.WordNetLemmatizer()
 
-tokens = []
+# Converte Tag NLTK in Tag Wordnet
+def get_wordnet_pos(tag):
+    if tag.startswith('J'):
+        return nltk.corpus.wordnet.ADJ
+    elif tag.startswith('V'):
+        return nltk.corpus.wordnet.VERB
+    elif tag.startswith('N'):
+        return nltk.corpus.wordnet.NOUN
+    elif tag.startswith('R'):
+        return nltk.corpus.wordnet.ADV
+    else:
+        return nltk.corpus.wordnet.NOUN
 
-# creazione della sequenza di token per ogni file contenente le recensioni
-for file in docs_path:
-    df = pd.read_csv(file, header=0, sep=';')
-
-    for rev in df["review"]:
-        # salta le recensioni vuote
-        if isinstance(rev,float):
-            continue
-
+# creazione della sequenza di token per il testo passato come argomento
+def preprocess_document(text):
+    # salta le recensioni vuote
+    if not isinstance(text, float):
         # Rende minuscolo
-        rev = rev.lower()
+        text = text.lower()
         # Rimuove URL
-        rev = re.sub(r'http\S+', '', rev)
+        text = re.sub(r'http\S+', '', text)
         # Rimuove menzioni e hashtag
-        rev = re.sub(r'@\w+|#\w+', '', rev)
+        text = re.sub(r'@\w+|#\w+', '', text)
         # Rimuove simboli inutili
-        rev = re.sub(r'[a-z0-9]+', '', rev)
+        text = re.sub(r'[a-z0-9]+', '', text)
 
         # Conversione del testo in token
-        rev_tokens = nltk.word_tokenize(rev)
+        text_tokens = nltk.word_tokenize(text)
 
         # Rimozione delle stopwords e parole composte da una lettera
-        filtered_tokens = [ token for token in rev_tokens if token not in stop_words and len(token) > 1 ]
+        filtered_tokens = [ token for token in text_tokens if token not in stop_words and len(token) > 1 ]
 
         # Stemming
         if STEMMING:
@@ -70,6 +55,4 @@ for file in docs_path:
             pos_tags = nltk.pos_tag(filtered_tokens)
             filtered_tokens = [ lemmatizer.lemmatize(t[0], get_wordnet_pos(t[1])) for t in pos_tags ]
 
-        tokens.append(filtered_tokens)
-
-print(tokens)
+        return filtered_tokens

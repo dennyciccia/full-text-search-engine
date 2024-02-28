@@ -6,26 +6,26 @@ import preprocessing as pp
 
 class InvertedIndex:
     def __init__(self, index_dir):
-        self.index_dir = index_dir
-        self.schema = Schema(doc_id=ID(unique=True,stored=True),content=TEXT)
-        self.index = None
+        self.__index_dir = index_dir
+        self.__schema = Schema(doc_id=ID(unique=True, stored=True), content=TEXT)
+        self.__index = None
 
     @property
-    def exist(self):
-        return exists_in(self.index_dir)
+    def exists(self):
+        return exists_in(self.__index_dir)
 
     def setup_index(self, documents):
-        if not os.path.exists(self.index_dir):
-            os.mkdir(self.index_dir)
+        if not os.path.exists(self.__index_dir):
+            os.mkdir(self.__index_dir)
         self.build_index(documents)
 
     def open_index(self):
-        self.index = open_dir(self.index_dir)
+        self.__index = open_dir(self.__index_dir)
 
     def build_index(self, documents):
         # creazione inverted index
-        self.index = create_in(self.index_dir, self.schema)
-        writer = self.index.writer()
+        self.__index = create_in(self.__index_dir, self.__schema)
+        writer = self.__index.writer()
         # indicizzazione documenti
         for doc_id, text in documents:
             terms = pp.preprocess_document(text)
@@ -35,7 +35,7 @@ class InvertedIndex:
         writer.commit()
 
     def search_documents(self, search):
-        with self.index.searcher() as searcher:
-            query = QueryParser("content", self.index.schema).parse(search)
+        with self.__index.searcher() as searcher:
+            query = QueryParser("content", self.__index.schema).parse(search)
             results = searcher.search(query)
             return [dict(result) for result in results]

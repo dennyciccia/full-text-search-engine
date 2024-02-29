@@ -40,8 +40,8 @@ class InvertedIndex:
         self.__index = create_in(self.__index_dir, self.__schema)
         writer = self.__index.writer()
         # indicizzazione documenti
-        for doc_id, text in documents:
-            terms = pp.preprocess_document(text)
+        for id, review, created, updated, voted_up, votes_up, votes_funny, written_during_early_access, steam_purchase, received_for_free in documents:
+            terms = pp.preprocess_document(review)
             if len(terms) > 0:
                 writer.add_document(
                     id=str(id),

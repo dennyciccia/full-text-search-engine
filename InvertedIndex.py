@@ -1,5 +1,6 @@
 import os
-from whoosh.fields import Schema, ID, TEXT
+from datetime import datetime
+from whoosh.fields import Schema, ID, TEXT, DATETIME, BOOLEAN, NUMERIC
 from whoosh.index import exists_in, open_dir, create_in
 from whoosh.qparser import QueryParser
 import preprocessing as pp
@@ -7,7 +8,19 @@ import preprocessing as pp
 class InvertedIndex:
     def __init__(self, index_dir):
         self.__index_dir = index_dir
-        self.__schema = Schema(doc_id=ID(unique=True, stored=True), content=TEXT)
+        self.__schema = Schema(
+            id=ID(unique=True, stored=True),
+            content=TEXT(stored=False),
+            review=TEXT(stored=True),
+            created=DATETIME(stored=True),
+            updated=DATETIME(stored=True),
+            voted_up=BOOLEAN(stored=True),
+            votes_up=NUMERIC(stored=True),
+            votes_funny=NUMERIC(stored=True),
+            written_during_early_access=BOOLEAN(stored=True),
+            steam_purchase=BOOLEAN(stored=True),
+            received_for_free=BOOLEAN(stored=True)
+        )
         self.__index = None
 
     @property
@@ -30,12 +43,24 @@ class InvertedIndex:
         for doc_id, text in documents:
             terms = pp.preprocess_document(text)
             if len(terms) > 0:
-                writer.add_document(doc_id=str(doc_id), content="".join(terms))
+                writer.add_document(
+                    id=str(id),
+                    content=' '.join(terms),
+                    review=review,
+                    created=datetime.fromtimestamp(created),
+                    updated=datetime.fromtimestamp(updated),
+                    voted_up=voted_up,
+                    votes_up=votes_up,
+                    votes_funny=votes_funny,
+                    written_during_early_access=written_during_early_access,
+                    steam_purchase=steam_purchase,
+                    received_for_free=received_for_free
+                )
         # commit delle modifiche all'indice
         writer.commit()
 
     def search_documents(self, search):
+        query = QueryParser("content", schema=self.__schema).parse(search)
         with self.__index.searcher() as searcher:
-            query = QueryParser("content", self.__index.schema).parse(search)
             results = searcher.search(query)
             return [dict(result) for result in results]

@@ -5,6 +5,7 @@ import preprocessing as pp
 INDEX_DIR = 'index'
 DOC_PATH = 'docs/BG3_reviews.csv'
 
+
 def print_results(res):
     print("\n-- Risultati --\n")
     for r in res:
@@ -17,8 +18,9 @@ def print_results(res):
         print(f"Scritta durante l'accesso anticipato: {r['written_during_early_access']}")
         print(f"Utenti che l'hanno trovata utile: {r['votes_up']}")
         print(f"Utenti che l'hanno trovata divertente: {r['votes_funny']}")
-        print(f"Testo recensione: {r['review']}")
+        print(f"Testo recensione: {r['review'].strip()}")
         print()
+
 
 if __name__ == "__main__":
     index = InvertedIndex(INDEX_DIR)
@@ -26,7 +28,9 @@ if __name__ == "__main__":
     if not index.exists:
         print("Costruzione inverted index...")
         df = pd.read_csv(DOC_PATH, header=0, sep=';')
-        documents = [(row['id'], row['review'], row['timestamp_created'], row['timestamp_updated'], row['voted_up'], row['votes_up'], row['votes_funny'], row['written_during_early_access'], row['steam_purchase'], row['received_for_free']) for _, row in df.iterrows()]
+        documents = [(row['id'], row['review'], row['timestamp_created'], row['timestamp_updated'], row['voted_up'],
+                      row['votes_up'], row['votes_funny'], row['written_during_early_access'], row['steam_purchase'],
+                      row['received_for_free']) for _, row in df.iterrows()]
         index.setup_index(documents)
     else:
         index.open_index()

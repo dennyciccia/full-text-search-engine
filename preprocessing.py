@@ -14,6 +14,7 @@ stop_words = set(nltk.corpus.stopwords.words('english'))
 stemmer = nltk.SnowballStemmer("english")
 lemmatizer = nltk.WordNetLemmatizer()
 
+
 # Converte Tag NLTK in Tag Wordnet
 def get_wordnet_pos(tag):
     if tag.startswith('J'):
@@ -26,6 +27,7 @@ def get_wordnet_pos(tag):
         return nltk.corpus.wordnet.ADV
     else:
         return nltk.corpus.wordnet.NOUN
+
 
 # creazione della sequenza di token per il testo passato come argomento
 def preprocess_document(text):
@@ -44,16 +46,16 @@ def preprocess_document(text):
         text_tokens = nltk.word_tokenize(text)
 
         # Rimozione delle stopwords e parole composte da una lettera
-        filtered_tokens = [ token for token in text_tokens if token not in stop_words and len(token) > 1 ]
+        filtered_tokens = [token for token in text_tokens if token not in stop_words and len(token) > 1]
 
         # Stemming
         if STEMMING:
-            filtered_tokens = [ stemmer.stem(token) for token in filtered_tokens ]
+            filtered_tokens = [stemmer.stem(token) for token in filtered_tokens]
 
         # Lemmatization
         if LEMMATIZATION:
             pos_tags = nltk.pos_tag(filtered_tokens)
-            filtered_tokens = [ lemmatizer.lemmatize(t[0], get_wordnet_pos(t[1])) for t in pos_tags ]
+            filtered_tokens = [lemmatizer.lemmatize(t[0], get_wordnet_pos(t[1])) for t in pos_tags]
 
         return filtered_tokens
     else:

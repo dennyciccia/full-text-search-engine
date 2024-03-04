@@ -1,5 +1,6 @@
-1- bastano 300.000 documenti?
+1- bastano 50.000 documenti?
 2- deve esserci un'interfaccia grafica?
 3- va bene la raccolta che abbiamo scelto?
 4- i documenti come devono essere organizzati? come file singoli oppure possono essere accorpati in file json?
 5- sono necessari stemming e lemmatization?
+6- va bene la sentiment analysis come la abbiamo implementata?

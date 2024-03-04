@@ -4,6 +4,10 @@ from whoosh.fields import Schema, ID, TEXT, DATETIME, BOOLEAN, NUMERIC
 from whoosh.index import exists_in, open_dir, create_in
 from whoosh.qparser import QueryParser
 import preprocessing as pp
+from transformers import pipeline
+
+# carica la pipeline di sentiment analysis
+classifier = pipeline("sentiment-analysis", model="j-hartmann/emotion-english-distilroberta-base", truncation=True)
 
 class InvertedIndex:
     def __init__(self, index_dir):
@@ -19,7 +23,9 @@ class InvertedIndex:
             votes_funny=NUMERIC(stored=True),
             written_during_early_access=BOOLEAN(stored=True),
             steam_purchase=BOOLEAN(stored=True),
-            received_for_free=BOOLEAN(stored=True)
+            received_for_free=BOOLEAN(stored=True),
+            sentiment=TEXT(stored=True),
+            score_sentiment=NUMERIC(stored=True)
         )
         self.__index = None
 
@@ -39,10 +45,11 @@ class InvertedIndex:
         # creazione inverted index
         self.__index = create_in(self.__index_dir, self.__schema)
         writer = self.__index.writer()
-        # indicizzazione documenti
+        # indicizzazione documenti con calcolo del sentiment
         for id, review, created, updated, voted_up, votes_up, votes_funny, written_during_early_access, steam_purchase, received_for_free in documents:
             terms = pp.preprocess_document(review)
             if len(terms) > 0:
+                sentiment = classifier(review)
                 writer.add_document(
                     id=str(id),
                     content=' '.join(terms),
@@ -54,7 +61,9 @@ class InvertedIndex:
                     votes_funny=votes_funny,
                     written_during_early_access=written_during_early_access,
                     steam_purchase=steam_purchase,
-                    received_for_free=received_for_free
+                    received_for_free=received_for_free,
+                    sentiment=sentiment[0]['label'],
+                    score_sentiment=sentiment[0]['score']
                 )
         # commit delle modifiche all'indice
         writer.commit()

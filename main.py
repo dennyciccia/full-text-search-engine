@@ -39,5 +39,6 @@ if __name__ == "__main__":
     # fase di searching
     query = input("Inserisci la query di ricerca: ")
     query = ' '.join(pp.preprocess_document(query))
-    results = index.search_documents(query)
+    sentiment = input("Inserisci sentimento della recensione: ")
+    results = index.search_documents(query, sentiment)
     print_results(results)

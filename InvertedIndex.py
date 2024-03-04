@@ -1,5 +1,7 @@
 import os
 from datetime import datetime
+
+import whoosh.query
 from whoosh.fields import Schema, ID, TEXT, DATETIME, BOOLEAN, NUMERIC
 from whoosh.index import exists_in, open_dir, create_in
 from whoosh.qparser import QueryParser
@@ -8,6 +10,7 @@ from transformers import pipeline
 
 # carica la pipeline di sentiment analysis
 classifier = pipeline("sentiment-analysis", model="j-hartmann/emotion-english-distilroberta-base", truncation=True)
+
 
 class InvertedIndex:
     def __init__(self, index_dir):
@@ -68,8 +71,12 @@ class InvertedIndex:
         # commit delle modifiche all'indice
         writer.commit()
 
-    def search_documents(self, search):
+    def search_documents(self, search, sentiment=None):
         query = QueryParser("content", schema=self.__schema).parse(search)
+        if sentiment is not None:
+            query_sentiment = QueryParser("sentiment", schema=self.__schema).parse(sentiment)
+            query = whoosh.query.And([query, query_sentiment])
+
         with self.__index.searcher() as searcher:
             results = searcher.search(query)
             return [dict(result) for result in results]

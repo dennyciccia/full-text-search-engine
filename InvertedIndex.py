@@ -71,28 +71,37 @@ class InvertedIndex:
         # commit delle modifiche all'indice
         writer.commit()
 
-    def search_documents(self, search=None, sentiment=None, limit=10):
+    def search_documents(self, content=None, sentiment=None, limit=10, mode='AND'):
+        # controllo parametri
+        assert content is not None or sentiment is not None
+        assert mode == 'AND' or mode == 'OR'
+
+        # inizializzazione
+        limit = int(limit)
         query_content = None
         query_sentiment = None
         query = None
 
+        # preprocessing della query
+        content = f" {mode} ".join(pp.preprocess_document(content))
+
         # determinazione della query
-        if search is not None:
-            query_content = QueryParser("content", schema=self.__schema).parse(search)
+        if content is not None:
+            query_content = QueryParser("content", schema=self.__schema).parse(content)
         if sentiment is not None:
             query_sentiment = QueryParser("sentiment", schema=self.__schema).parse(sentiment)
 
         # eventuale unione delle query
-        if search is not None and sentiment is not None:
+        if content is not None and sentiment is not None:
             query = whoosh.query.And([query_content, query_sentiment])
-        elif search is not None:
+        elif content is not None:
             query = query_content
         elif sentiment is not None:
             query = query_sentiment
 
         # ricerca
         with self.__index.searcher() as searcher:
-            if search is not None and sentiment is not None:
+            if content is not None and sentiment is not None:
                 results = searcher.search(query, limit=None)
                 results_with_avg_score = []
                 for r in results:
@@ -102,7 +111,7 @@ class InvertedIndex:
                 sorted_results = sorted(results_with_avg_score, key=lambda x: x['avg_score'], reverse=True)
                 return sorted_results[:limit]
 
-            elif search is not None:
+            elif content is not None:
                 results = searcher.search(query, limit=limit)
                 return [dict(r) for r in results]
 

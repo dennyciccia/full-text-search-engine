@@ -70,7 +70,7 @@ def search_menu():
         if scelta == '1':
             query = input("Inserisci la query di ricerca: ")
             query = ' '.join(pp.preprocess_document(query))
-            results = index.search_documents(search=query, limit=reviews_limit)
+            results = index.search_documents(content=query, limit=reviews_limit)
             print_results(results)
 
         elif scelta == '2':
@@ -80,7 +80,7 @@ def search_menu():
         elif scelta == '3':
             query = input("Inserisci la query di ricerca: ")
             query = ' '.join(pp.preprocess_document(query))
-            results = index.search_documents(search=query, sentiment=sentiment_menu(), limit=reviews_limit)
+            results = index.search_documents(content=query, sentiment=sentiment_menu(), limit=reviews_limit)
             print_results(results)
 
         elif scelta == '4':
@@ -116,9 +116,28 @@ def sentiment_menu():
             print("Scelta non valida")
 
 
+def menu_libero():
+    results = None
+    repeat = True
+    while repeat:
+        try:
+            input_query = input("Inserisci la query di ricerca: ")
+            query = dict((k.strip(), v.strip()) for k,v in (element.split(': ') for element in input_query.split(', ')))
+            results = index.search_documents(**query)
+        except (TypeError, ValueError, AssertionError):
+            print("Query non valida")
+        else:
+            repeat = False
+    print_results(results)
+
+
 if __name__ == "__main__":
     # definizione e costruzione inverted index
     open_index()
 
     # fase di searching
-    menu()
+    m = input("1. Ricerca guidata\n2. Ricerca con query language\nScelta: ")
+    if m == '1':
+        menu()
+    elif m == '2':
+        menu_libero()

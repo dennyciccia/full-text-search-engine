@@ -4,3 +4,4 @@
 4- i documenti come devono essere organizzati? come file singoli oppure possono essere accorpati in file json?
 5- sono necessari stemming e lemmatization?
 6- va bene la sentiment analysis come la abbiamo implementata?
+7- sono richieste entrambe sentiment analysis e word2vec per raggiungere il 30?

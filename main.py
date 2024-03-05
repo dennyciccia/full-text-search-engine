@@ -18,7 +18,7 @@ def print_results(res):
         print(f"Scritta durante l'accesso anticipato: {r['written_during_early_access']}")
         print(f"Utenti che l'hanno trovata utile: {r['votes_up']}")
         print(f"Utenti che l'hanno trovata divertente: {r['votes_funny']}")
-        print(f"Sentimento rilevato: {r.sentiment}, score: {r.score_sentiment}")
+        print(f"Sentimento rilevato: {r['sentiment']}, score: {r['score_sentiment']}")
         print(f"Testo recensione: {r['review'].strip()}")
         print()
 

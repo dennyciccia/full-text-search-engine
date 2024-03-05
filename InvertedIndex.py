@@ -71,12 +71,45 @@ class InvertedIndex:
         # commit delle modifiche all'indice
         writer.commit()
 
-    def search_documents(self, search, sentiment=None):
-        query = QueryParser("content", schema=self.__schema).parse(search)
+    def search_documents(self, search=None, sentiment=None, limit=10):
+        query_content = None
+        query_sentiment = None
+        query = None
+
+        # determinazione della query
+        if search is not None:
+            query_content = QueryParser("content", schema=self.__schema).parse(search)
         if sentiment is not None:
             query_sentiment = QueryParser("sentiment", schema=self.__schema).parse(sentiment)
-            query = whoosh.query.And([query, query_sentiment])
 
+        # eventuale unione delle query
+        if search is not None and sentiment is not None:
+            query = whoosh.query.And([query_content, query_sentiment])
+        elif search is not None:
+            query = query_content
+        elif sentiment is not None:
+            query = query_sentiment
+
+        # ricerca
         with self.__index.searcher() as searcher:
-            results = searcher.search(query)
-            return [dict(result) for result in results]
+            if search is not None and sentiment is not None:
+                results = searcher.search(query, limit=None)
+                results_with_avg_score = []
+                for r in results:
+                    result_dict = dict(r)
+                    result_dict['avg_score'] = (r.score + result_dict['score_sentiment'] * 10) / 2
+                    results_with_avg_score.append(result_dict)
+                sorted_results = sorted(results_with_avg_score, key=lambda x: x['avg_score'], reverse=True)
+                return sorted_results[:limit]
+
+            elif search is not None:
+                results = searcher.search(query, limit=limit)
+                return [dict(r) for r in results]
+
+            elif sentiment is not None:
+                results = [dict(r) for r in searcher.search(query, limit=None)]
+                sorted_results = sorted(results, key=lambda x: x['score_sentiment'], reverse=True)
+                return sorted_results[:limit]
+
+            else:
+                return []

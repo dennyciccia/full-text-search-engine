@@ -7,19 +7,21 @@ Search engine che permette di eseguire ricerche full-text su una collection di d
 
 **Query language**
 
-query = ( content [, sentiment] | sentiment [, content] ) [, limit] [, mode]
+query -> content, sentiment, mode, limit
 
 content = content: _word_ _word_ ...
 
-sentiment = sentiment: "anger"|"disgust"|"fear"|"joy"|"neutral"|"sadness"|"surprise"
+sentiment = sentiment: "anger" | "disgust" | "fear" | "joy" | "neutral" | "sadness" | "surprise"
 
 limit = limit: _number_
 
-mode = mode: (AND|OR)
+mode = mode: AND|OR
 
 operatore logico default: AND
 
 limite di default: 10
+
+Devono essere sempre presenti content o sentiment, mode e limit sono opzionali.
 
 --------------------------
 

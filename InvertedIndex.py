@@ -73,8 +73,8 @@ class InvertedIndex:
 
     def search_documents(self, content=None, sentiment=None, limit=10, mode='AND'):
         # controllo parametri
-        assert content is not None or sentiment is not None
-        assert mode == 'AND' or mode == 'OR'
+        if (content is None and sentiment is None) or mode not in ['AND', 'OR']:
+            raise ValueError("")
 
         # inizializzazione
         limit = int(limit)
@@ -82,11 +82,9 @@ class InvertedIndex:
         query_sentiment = None
         query = None
 
-        # preprocessing della query
-        content = f" {mode} ".join(pp.preprocess_document(content))
-
         # determinazione della query
         if content is not None:
+            content = f" {mode} ".join(pp.preprocess_document(content))
             query_content = QueryParser("content", schema=self.__schema).parse(content)
         if sentiment is not None:
             query_sentiment = QueryParser("sentiment", schema=self.__schema).parse(sentiment)

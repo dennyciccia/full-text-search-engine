@@ -124,7 +124,7 @@ def menu_libero():
             input_query = input("Inserisci la query di ricerca: ")
             query = dict((k.strip(), v.strip()) for k,v in (element.split(': ') for element in input_query.split(', ')))
             results = index.search_documents(**query)
-        except (TypeError, ValueError, AssertionError):
+        except (TypeError, ValueError):
             print("Query non valida")
         else:
             repeat = False
@@ -136,8 +136,13 @@ if __name__ == "__main__":
     open_index()
 
     # fase di searching
-    m = input("1. Ricerca guidata\n2. Ricerca con query language\nScelta: ")
-    if m == '1':
-        menu()
-    elif m == '2':
-        menu_libero()
+    scelta = -1
+    while scelta != '0':
+        print("1. Ricerca guidata")
+        print("2. Ricerca con query language")
+        print("0. Esci")
+        scelta = input("Scelta: ")
+        if scelta == '1':
+            menu()
+        elif scelta == '2':
+            menu_libero()

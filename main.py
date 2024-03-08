@@ -42,7 +42,8 @@ def menu():
     scelta = -1
     while scelta != '0':
         print("1. Ricostruisci l'indice - ATTENZIONE: operazione molto lenta!")
-        print("2. Cerca recensioni")
+        print("2. Ricerca recensioni guidata")
+        print("3. Ricerca recensioni con query language")
         print("0. Esci")
         scelta = input("Inserisci la tua scelta: ")
         
@@ -50,6 +51,8 @@ def menu():
             open_index(force=True)
         elif scelta == '2':
             search_menu()
+        elif scelta == '3':
+            query_language_menu()
         elif scelta == '0':
             pass
         else:
@@ -116,7 +119,7 @@ def sentiment_menu():
             print("Scelta non valida")
 
 
-def menu_libero():
+def query_language_menu():
     results = None
     repeat = True
     while repeat:
@@ -136,13 +139,4 @@ if __name__ == "__main__":
     open_index()
 
     # fase di searching
-    scelta = -1
-    while scelta != '0':
-        print("1. Ricerca guidata")
-        print("2. Ricerca con query language")
-        print("0. Esci")
-        scelta = input("Scelta: ")
-        if scelta == '1':
-            menu()
-        elif scelta == '2':
-            menu_libero()
+    menu()

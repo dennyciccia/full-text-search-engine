@@ -40,18 +40,22 @@ def print_results(res):
         
 def menu():
     scelta = -1
+    global reviews_limit
     while scelta != '0':
         print("1. Ricostruisci l'indice - ATTENZIONE: operazione molto lenta!")
-        print("2. Ricerca recensioni guidata")
-        print("3. Ricerca recensioni con query language")
+        print("2. Cambia limite di risultati (attuale: " + str(reviews_limit) + ")")
+        print("3. Ricerca recensioni guidata")
+        print("4. Ricerca recensioni con query language")
         print("0. Esci")
         scelta = input("Inserisci la tua scelta: ")
         
         if scelta == '1':
             open_index(force=True)
         elif scelta == '2':
-            search_menu()
+            reviews_limit = int(input("Nuovo limite: "))
         elif scelta == '3':
+            search_menu()
+        elif scelta == '4':
             query_language_menu()
         elif scelta == '0':
             pass
@@ -66,7 +70,6 @@ def search_menu():
         print("1. Ricerca per testo")
         print("2. Ricerca per sentimento")
         print("3. Ricerca per testo e sentimento")
-        print("4. Cambia limite di risultati (attuale: " + str(reviews_limit) + ")")
         print("0. Torna al menu principale")
         scelta = input("Inserisci la tua scelta: ")
         
@@ -85,9 +88,6 @@ def search_menu():
             query = ' '.join(pp.preprocess_document(query))
             results = index.search_documents(content=query, sentiment=sentiment_menu(), limit=reviews_limit)
             print_results(results)
-
-        elif scelta == '4':
-            reviews_limit = int(input("Nuovo limite: "))
 
         elif scelta == '0':
             pass
@@ -122,11 +122,12 @@ def sentiment_menu():
 def query_language_menu():
     results = None
     repeat = True
+    global reviews_limit
     while repeat:
         try:
             input_query = input("Inserisci la query di ricerca: ")
             query = dict((k.strip(), v.strip()) for k,v in (element.split(': ') for element in input_query.split(', ')))
-            results = index.search_documents(**query)
+            results = index.search_documents(**query, limit=reviews_limit)
         except (TypeError, ValueError):
             print("Query non valida")
         else:
@@ -138,5 +139,5 @@ if __name__ == "__main__":
     # definizione e costruzione inverted index
     open_index()
 
-    # fase di searching
+    # menu principale
     menu()

@@ -5,7 +5,6 @@ import whoosh.query
 from whoosh.fields import Schema, ID, TEXT, DATETIME, BOOLEAN, NUMERIC
 from whoosh.index import exists_in, open_dir, create_in
 from whoosh.qparser import QueryParser
-import preprocessing as pp
 from transformers import pipeline
 
 # carica la pipeline di sentiment analysis
@@ -49,13 +48,12 @@ class InvertedIndex:
         self.__index = create_in(self.__index_dir, self.__schema)
         writer = self.__index.writer()
         # indicizzazione documenti con calcolo del sentiment
-        for id, review, created, updated, voted_up, votes_up, votes_funny, written_during_early_access, steam_purchase, received_for_free in documents:
-            terms = pp.preprocess_document(review)
-            if len(terms) > 0:
+        for review_id, tokenized_review, review, created, updated, voted_up, votes_up, votes_funny, written_during_early_access, steam_purchase, received_for_free in documents:
+            if len(tokenized_review) > 0:
                 sentiment = classifier(review)
                 writer.add_document(
-                    id=str(id),
-                    content=' '.join(terms),
+                    id=str(review_id),
+                    content=' '.join(tokenized_review),
                     review=review,
                     created=datetime.fromtimestamp(created),
                     updated=datetime.fromtimestamp(updated),
@@ -84,7 +82,7 @@ class InvertedIndex:
 
         # determinazione della query
         if content is not None:
-            content = f" {mode} ".join(pp.preprocess_document(content))
+            content = f" {mode} ".join(content)
             query_content = QueryParser("content", schema=self.__schema).parse(content)
         if sentiment is not None:
             query_sentiment = QueryParser("sentiment", schema=self.__schema).parse(sentiment)
@@ -120,7 +118,3 @@ class InvertedIndex:
 
             else:
                 return []
-
-
-    def search_documents_word2vec(self, content, limit=10, mode='AND'):
-        pass

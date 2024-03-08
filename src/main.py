@@ -1,24 +1,8 @@
-import pandas as pd
-from InvertedIndex import InvertedIndex
 import preprocessing as pp
+import setup
 
-INDEX_DIR = 'index'
-DOC_PATH = 'docs/BG3_reviews.csv'
 
-index = InvertedIndex(INDEX_DIR)
 reviews_limit = 10
-
-def open_index(force=False):
-    # l'indice viene costruito solo se non è già presente nella sua cartella
-    if not index.exists or force:
-        print("Costruzione inverted index...")
-        df = pd.read_csv(DOC_PATH, header=0, sep=';')
-        documents = [(row['id'], row['review'], row['timestamp_created'], row['timestamp_updated'], row['voted_up'],
-                      row['votes_up'], row['votes_funny'], row['written_during_early_access'], row['steam_purchase'],
-                      row['received_for_free']) for _, row in df.iterrows()]
-        index.setup_index(documents)
-    else:
-        index.open_index()
 
 
 def print_results(res):
@@ -36,32 +20,29 @@ def print_results(res):
         print(f"Sentimento rilevato: {r['sentiment']}, score: {r['score_sentiment']}")
         print(f"Testo recensione: {r['review'].strip()}")
         print()
-        
-        
+
+
 def menu():
     scelta = -1
     global reviews_limit
     while scelta != '0':
-        print("1. Ricostruisci l'indice - ATTENZIONE: operazione molto lenta!")
-        print("2. Cambia limite di risultati (attuale: " + str(reviews_limit) + ")")
-        print("3. Ricerca recensioni guidata")
-        print("4. Ricerca recensioni con query language")
+        print("1. Ricostruisci l'indice e modello Word2Vec - ATTENZIONE: operazione molto lenta!")
+        print("2. Ricerca recensioni guidata")
+        print("3. Ricerca recensioni con query language")
         print("0. Esci")
         scelta = input("Inserisci la tua scelta: ")
-        
+
         if scelta == '1':
-            open_index(force=True)
+            setup.init_index_and_word2vec(force=True)
         elif scelta == '2':
-            reviews_limit = int(input("Nuovo limite: "))
-        elif scelta == '3':
             search_menu()
-        elif scelta == '4':
+        elif scelta == '3':
             query_language_menu()
         elif scelta == '0':
             pass
         else:
             print("Scelta non valida")
-        
+
 
 def search_menu():
     scelta = -1
@@ -70,12 +51,13 @@ def search_menu():
         print("1. Ricerca per testo")
         print("2. Ricerca per sentimento")
         print("3. Ricerca per testo e sentimento")
+        print("4. Ricerca per testo con Word2Vec")
+        print("5. Cambia limite di risultati (attuale: " + str(reviews_limit) + ")")
         print("0. Torna al menu principale")
         scelta = input("Inserisci la tua scelta: ")
-        
+
         if scelta == '1':
-            query = input("Inserisci la query di ricerca: ")
-            query = ' '.join(pp.preprocess_document(query))
+            query = pp.preprocess_document(input("Inserisci la query di ricerca: "))
             results = index.search_documents(content=query, limit=reviews_limit)
             print_results(results)
 
@@ -84,17 +66,25 @@ def search_menu():
             print_results(results)
 
         elif scelta == '3':
-            query = input("Inserisci la query di ricerca: ")
-            query = ' '.join(pp.preprocess_document(query))
+            query = pp.preprocess_document(input("Inserisci la query di ricerca: "))
             results = index.search_documents(content=query, sentiment=sentiment_menu(), limit=reviews_limit)
             print_results(results)
+
+        elif scelta == '4':
+            query = word2vec_expansion(input("Inserisci la query di ricerca: "))
+            results = index.search_documents(content=query, limit=reviews_limit)
+            print_results(results)
+
+        elif scelta == '5':
+            reviews_limit = int(input("Inserisci il nuovo limite di risultati: "))
+            print("Limite impostato a " + str(reviews_limit))
 
         elif scelta == '0':
             pass
 
         else:
             print("Scelta non valida")
-        
+
 
 def sentiment_menu():
     scelta = -1
@@ -122,12 +112,16 @@ def sentiment_menu():
 def query_language_menu():
     results = None
     repeat = True
-    global reviews_limit
     while repeat:
         try:
             input_query = input("Inserisci la query di ricerca: ")
-            query = dict((k.strip(), v.strip()) for k,v in (element.split(': ') for element in input_query.split(', ')))
-            results = index.search_documents(**query, limit=reviews_limit)
+            query = dict((k.strip(), v.strip()) for k, v in (element.split(': ') for element in input_query.split(', ')))
+
+            query['content'] = pp.preprocess_document(query['content'])
+            if query['word2vec'] == 'True':
+                query['content'] = word2vec_expansion(query['content'])
+
+            results = index.search_documents(**query)
         except (TypeError, ValueError):
             print("Query non valida")
         else:
@@ -135,9 +129,21 @@ def query_language_menu():
     print_results(results)
 
 
+def word2vec_expansion(query):
+    expanded_query = []
+    for word in query:
+        try:
+            similar_words = word2vec_model.wv.most_similar(word, topn=3)
+            expanded_query.extend([similar_word for similar_word, _ in similar_words])
+        except KeyError:
+            # se la parola non è nel vocabolario
+            expanded_query.append(word)
+    return expanded_query
+
+
 if __name__ == "__main__":
-    # definizione e costruzione inverted index
-    open_index()
+    # inizializzazione indice e modello word2vec
+    index, word2vec_model = setup.init_index_and_word2vec()
 
     # menu principale
-    menu()
+    menu(index, word2vec_model)

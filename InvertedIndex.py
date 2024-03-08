@@ -120,3 +120,7 @@ class InvertedIndex:
 
             else:
                 return []
+
+
+    def search_documents_word2vec(self, content, limit=10, mode='AND'):
+        pass

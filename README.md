@@ -23,8 +23,10 @@ limite di default: 10
 
 Devono essere sempre presenti content o sentiment, mode e limit sono opzionali.
 
+Si può cercare una frase esatta mettendo le parole tra doppi apici ("...").
+
 --------------------------
 
-**Installazione requisiti**
+**File requisiti**
 
-pip insall -r requirements.txt
+requirements.txt

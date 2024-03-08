@@ -1,12 +1,8 @@
-import os
 from gensim.models import Word2Vec
 import pandas as pd
-from InvertedIndex import InvertedIndex
 import preprocessing as pp
 
 DOC_PATH = '../docs/BG3_reviews.csv'
-WORD2VEC_MODEL_PATH = '../data/word2vec.model'
-INDEX_DIR = '../data/index'
 
 
 def get_documents():
@@ -20,12 +16,7 @@ def get_documents():
     return documents
 
 
-def init_index_and_word2vec(force=False):
-    index = InvertedIndex(INDEX_DIR)
-    word2vec_model = None
-    if os.path.exists(WORD2VEC_MODEL_PATH):
-        word2vec_model = Word2Vec.load(WORD2VEC_MODEL_PATH)
-
+def init_index_and_word2vec(index, word2vec_model, word2_vec_model_path, force=False):
     if force or not index.exists or word2vec_model is None:
         documents = get_documents()
         if force or not index.exists:
@@ -34,6 +25,4 @@ def init_index_and_word2vec(force=False):
         if force or word2vec_model is None:
             print("Addestramento modello word2vec...")
             word2vec_model = Word2Vec([d[1] for d in documents])
-            word2vec_model.save(WORD2VEC_MODEL_PATH)
-
-    return index, word2vec_model
+            word2vec_model.save(word2_vec_model_path)

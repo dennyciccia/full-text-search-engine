@@ -1,6 +1,15 @@
+import os
+from gensim.models import Word2Vec
 import preprocessing as pp
 import setup
+from InvertedIndex import InvertedIndex
 
+
+WORD2VEC_MODEL_PATH = '../data/word2vec.model'
+INDEX_DIR = '../data/index'
+
+index = None
+word2vec_model = None
 
 reviews_limit = 10
 
@@ -33,7 +42,7 @@ def menu():
         scelta = input("Inserisci la tua scelta: ")
 
         if scelta == '1':
-            setup.init_index_and_word2vec(force=True)
+            setup.init_index_and_word2vec(index, word2vec_model, WORD2VEC_MODEL_PATH, force=True)
         elif scelta == '2':
             search_menu()
         elif scelta == '3':
@@ -117,8 +126,10 @@ def query_language_menu():
             input_query = input("Inserisci la query di ricerca: ")
             query = dict((k.strip(), v.strip()) for k, v in (element.split(': ') for element in input_query.split(', ')))
 
+            ## aggiungere controlli sulla correttezza dei campi della query ##
+
             query['content'] = pp.preprocess_document(query['content'])
-            if query['word2vec'] == 'True':
+            if 'word2vec' in query.keys() and query['word2vec'] == 'True':
                 query['content'] = word2vec_expansion(query['content'])
 
             results = index.search_documents(**query)
@@ -143,7 +154,12 @@ def word2vec_expansion(query):
 
 if __name__ == "__main__":
     # inizializzazione indice e modello word2vec
-    index, word2vec_model = setup.init_index_and_word2vec()
+    index = InvertedIndex(INDEX_DIR)
+    if os.path.exists(WORD2VEC_MODEL_PATH):
+       word2vec_model = Word2Vec.load(WORD2VEC_MODEL_PATH)
+
+    setup.init_index_and_word2vec(index, word2vec_model, WORD2VEC_MODEL_PATH)
+    index.open_index()
 
     # menu principale
-    menu(index, word2vec_model)
+    menu()

@@ -70,10 +70,6 @@ class InvertedIndex:
         writer.commit()
 
     def search_documents(self, content=None, sentiment=None, limit=10, mode='AND'):
-        # controllo parametri
-        if (content is None and sentiment is None) or mode not in ['AND', 'OR']:
-            raise ValueError("")
-
         # inizializzazione
         limit = int(limit)
         query_content = None

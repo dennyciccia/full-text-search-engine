@@ -91,7 +91,7 @@ class InvertedIndex:
         elif sentiment is not None:
             query = query_sentiment
 
-        # ricerca
+        # ricerca e ranking
         with self.__index.searcher() as searcher:
             if content is not None and sentiment is not None:
                 results = searcher.search(query, limit=None)

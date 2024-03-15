@@ -1,6 +1,5 @@
 import os
 from datetime import datetime
-
 import whoosh.query
 from whoosh.fields import Schema, ID, TEXT, DATETIME, BOOLEAN, NUMERIC
 from whoosh.index import exists_in, open_dir, create_in

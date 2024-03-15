@@ -21,6 +21,8 @@ word2vec = word2vec: True|False
 
 operatore logico default: AND
 
+operatore logico per word2vec: OR
+
 word2vec default: False
 
 limite di default: 10

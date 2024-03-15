@@ -4,7 +4,6 @@ import preprocessing as pp
 import setup
 from InvertedIndex import InvertedIndex
 
-
 WORD2VEC_MODEL_PATH = '../data/word2vec.model'
 INDEX_DIR = '../data/index'
 
@@ -80,8 +79,8 @@ def search_menu():
             print_results(results)
 
         elif scelta == '4':
-            query = word2vec_expansion(input("Inserisci la query di ricerca: "))
-            results = index.search_documents(content=query, limit=reviews_limit)
+            query = word2vec_expansion(pp.preprocess_document(input("Inserisci la query di ricerca: ")))
+            results = index.search_documents(content=query, limit=reviews_limit, mode='OR')
             print_results(results)
 
         elif scelta == '5':
@@ -118,23 +117,44 @@ def sentiment_menu():
             print("Scelta non valida")
 
 
+def check_query_language(content=None, sentiment=None, limit=10, mode='AND', word2vec=None, **kwargs):
+    if content is None and sentiment is None:
+        raise ValueError("Deve essere presente o il content o il sentiment")
+    if sentiment is not None and sentiment not in ['anger', 'disgust', 'fear', 'joy', 'neutral', 'sadness', 'surprise']:
+        raise ValueError("Sentiment non valido")
+    if mode is not None and mode not in ['AND', 'OR']:
+        raise ValueError("Mode deve essere 'AND' o 'OR'")
+    if not isinstance(limit, int) or int(limit) <= 0:
+        raise ValueError("Limit deve essere un intero positivo")
+    if word2vec is not None:
+        if word2vec not in ['True', 'False']:
+            raise ValueError("Word2Vec deve essere True o False")
+        if word2vec and content is None:
+            raise ValueError("Se word2vec è True, content deve essere presente")
+    if kwargs:
+        raise ValueError("Parametri non validi")
+
+
 def query_language_menu():
     results = None
     repeat = True
     while repeat:
         try:
             input_query = input("Inserisci la query di ricerca: ")
-            query = dict((k.strip(), v.strip()) for k, v in (element.split(': ') for element in input_query.split(', ')))
+            query = dict(
+                (k.strip(), v.strip()) for k, v in (element.split(': ') for element in input_query.split(', ')))
 
-            ## aggiungere controlli sulla correttezza dei campi della query ##
+            check_query_language(**query)
 
             query['content'] = pp.preprocess_document(query['content'])
-            if 'word2vec' in query.keys() and query['word2vec'] == 'True':
-                query['content'] = word2vec_expansion(query['content'])
-
+            if 'word2vec' in query.keys() :
+                if query['word2vec'] == 'True':
+                    query['content'] = word2vec_expansion(query['content'])
+                    query['mode'] = 'OR'
+                del query['word2vec']
             results = index.search_documents(**query)
-        except (TypeError, ValueError):
-            print("Query non valida")
+        except (TypeError, ValueError) as e:
+            print("Query non valida:", e)
         else:
             repeat = False
     print_results(results)
@@ -146,6 +166,7 @@ def word2vec_expansion(query):
         try:
             similar_words = word2vec_model.wv.most_similar(word, topn=3)
             expanded_query.extend([similar_word for similar_word, _ in similar_words])
+            expanded_query.append(word)
         except KeyError:
             # se la parola non è nel vocabolario
             expanded_query.append(word)
@@ -156,7 +177,7 @@ if __name__ == "__main__":
     # inizializzazione indice e modello word2vec
     index = InvertedIndex(INDEX_DIR)
     if os.path.exists(WORD2VEC_MODEL_PATH):
-       word2vec_model = Word2Vec.load(WORD2VEC_MODEL_PATH)
+        word2vec_model = Word2Vec.load(WORD2VEC_MODEL_PATH)
 
     setup.init_index_and_word2vec(index, word2vec_model, WORD2VEC_MODEL_PATH)
     index.open_index()

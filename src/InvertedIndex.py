@@ -80,6 +80,7 @@ class InvertedIndex:
             content = f" {mode} ".join(content)
             query_content = QueryParser("content", schema=self.__schema).parse(content)
         if sentiment is not None:
+            content = " OR ".join(sentiment.split())
             query_sentiment = QueryParser("sentiment", schema=self.__schema).parse(sentiment)
 
         # eventuale unione delle query

@@ -7,8 +7,9 @@ Know whether someone found the game physics unrealistic; content: physics unreal
 Information about game comparison with previews chapters; content: previews chapters compared, sentiment: neutral, mode: AND;
 Know if someone found the plot interesting, involving or surprising; content: plot interesting involving surprising, sentiment: surprise joy, mode: OR;
 Information about game replayability and if it is as fun as the first run; content: replayability fun as first run, sentiment: joy suprise anger sadness disgust neutral, mode: AND;
-Some opinions about character customization; sentiment: joy surprise anger sadness disgust neutral
-Information about game genre, is it an actual RPG?; sentiment: neutral
-Know whether dungeons and dragons player liked the game; sentiment: joy surprise anger sadness disgust neutral
-Know if the character Astarion is a good companion;
-Qualcuno che ha detto che il gioco è bello ma è troppo lungo;
+Some opinions about classes and races in character customization; content: character customization classes races, sentiment: joy surprise anger sadness disgust neutral, mode: AND;
+Know if there are payments or microtransactions; content: microtransaction payment, sentiment: neutral, mode: OR;
+Know whether dungeons and dragons player liked game's dice rolling system; content: d&d dungeons and dragons player dice rolling system, sentiment: joy surprise anger sadness disgust, mode: OR;
+Know if the character Astarion is a good companion; content: Astarion good companion, sentiment: neutral, mode: AND;
+Know if someone think that the game is good but it's too long; content: good but too long, sentiment: neutral, mode: AND;
+Know if this game may be liked by a woman; content: woman like, sentiment: neutral, mode: AND;

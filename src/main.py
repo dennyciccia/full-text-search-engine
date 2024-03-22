@@ -120,8 +120,8 @@ def sentiment_menu():
 def check_query_language(content=None, sentiment=None, limit=10, mode='AND', word2vec=None, **kwargs):
     if content is None and sentiment is None:
         raise ValueError("Deve essere presente o il content o il sentiment")
-    #if sentiment is not None and not set(sentiment).issubset({'anger', 'disgust', 'fear', 'joy', 'neutral', 'sadness', 'surprise'}):
-    #    raise ValueError("Sentiment non valido")
+    if sentiment is not None and not set(sentiment.split()).issubset({'anger', 'disgust', 'fear', 'joy', 'neutral', 'sadness', 'surprise'}):
+        raise ValueError("Sentiment non valido")
     if mode is not None and mode not in ['AND', 'OR']:
         raise ValueError("Mode deve essere 'AND' o 'OR'")
     if not isinstance(int(limit), int) or int(limit) <= 0:

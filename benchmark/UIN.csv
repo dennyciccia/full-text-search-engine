@@ -1,14 +1,14 @@
 UIN; query; R
-Information about gameplay quality; content: gameplay quality, sentiment: neutral, mode: AND; 8644,40645,54531,45291,67025,99723,40841,68277,83658
-Know what you can do while playing this game (sidequest, exploring, roleplaying, ...); content: sidequest exploring roleplaying things to do while playing, sentiment: neutral, mode: OR; 95166,34389,67785,68983,1267
-Know whether someone liked game's nonplayable characters; sentiment: joy surprise
-Know game's problems, issues and bugs; sentiment: anger sadness disgust
-Know whether someone didn't like the game physics; sentiment: anger sadnesss disgust
-Information about game comparison with previews chapters; sentiment: neutral
-Know if someone found the plot interesting, involving or surprising; sentiment: surprise joy
-Information about game replayability and if it is as fun as the first run; sentiment: joy suprise anger sadness disgust neutral
+Information about quality of the sidequest and rolepalaing; content: sidequest roleplaying quality, sentiment: neutral, mode: AND;
+Know what you can do while playing this game (sidequest, exploring, roleplaying, ...); content: sidequest exploring roleplaying things to do while playing, sentiment: neutral, mode: OR;
+Know whether someone liked game's nonhuman nonplayable characters; content: nonhuman nonplayable characters npc, sentiment: joy surprise, mode:OR;
+Know game's graphics problems, issues and bugs; content: problems issues bugs graphics, sentiment: anger sadness disgust, mode: OR;
+Know whether someone found the game physics unrealistic; content: physics unrealistic, sentiment: anger sadness disgust, mode: AND;
+Information about game comparison with previews chapters; content: previews chapters compared, sentiment: neutral, mode: AND;
+Know if someone found the plot interesting, involving or surprising; content: plot interesting involving surprising, sentiment: surprise joy, mode: OR;
+Information about game replayability and if it is as fun as the first run; content: replayability fun as first run, sentiment: joy suprise anger sadness disgust neutral, mode: AND;
 Some opinions about character customization; sentiment: joy surprise anger sadness disgust neutral
 Information about game genre, is it an actual RPG?; sentiment: neutral
 Know whether dungeons and dragons player liked the game; sentiment: joy surprise anger sadness disgust neutral
-Qualcosa di qualcuno suprised about the quality of the game;
+Know if the character Astarion is a good companion;
 Qualcuno che ha detto che il gioco è bello ma è troppo lungo;

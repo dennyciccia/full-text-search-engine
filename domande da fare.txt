@@ -1,13 +1,8 @@
-1- bastano 50.000 documenti?
-2- deve esserci un'interfaccia grafica?
-3- va bene la raccolta che abbiamo scelto?
-4- i documenti come devono essere organizzati? come file singoli oppure possono essere accorpati in file json?
-5- sono necessari stemming e lemmatization?
 6- va bene la sentiment analysis come la abbiamo implementata?
-7- sono richieste entrambe sentiment analysis e word2vec per raggiungere il 30?
 8- come si può implementare la funzione di ranking nel search engine di base?
 9- quali misure di benchamrk servono?
 10- come si confrontano i benchmark del search engine di base e quello con sentiment analysis che hanno parametri diversi?
 11- come si fa il benchmark?
 12- è corretto il word2vec come lo abbiamo implementato noi?
 13- va bene la ricerca solo nel content?
+14- va bene la funzione mode che abbiamo fatto?

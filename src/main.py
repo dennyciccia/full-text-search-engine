@@ -3,9 +3,7 @@ from gensim.models import Word2Vec
 import preprocessing as pp
 import setup
 from InvertedIndex import InvertedIndex
-
-WORD2VEC_MODEL_PATH = '../data/word2vec.model'
-INDEX_DIR = '../data/index'
+from config import INDEX_DIR, WORD2VEC_MODEL_PATH
 
 index = None
 word2vec_model = None

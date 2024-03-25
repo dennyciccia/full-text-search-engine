@@ -1,8 +1,7 @@
 from gensim.models import Word2Vec
 import pandas as pd
 import preprocessing as pp
-
-DOC_PATH = '../docs/BG3_reviews.csv'
+from config import DOC_PATH
 
 
 def get_documents():

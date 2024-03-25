@@ -34,9 +34,9 @@ Le query sono composte da parametri:
   ```
     content: "phrase"
   ```
-* `sentiment`: filtra i risultati per il sentimento specificato (opzionale, obbligatorio se non è presente `content`)
+* `sentiment`: filtra i risultati per il sentimento specificato (opzionale, obbligatorio se non è presente `content`, si possono cercare più sentiment in OR separandoli da spazio)
     ```
-    sentiment: "anger" | "disgust" | "fear" | "joy" | "neutral" | "sadness" | "surprise"
+    sentiment: anger | disgust | fear | joy | neutral | sadness | surprise
     ```
 * `mode`: specifica la modalità di ricerca (opzionale, default: AND)
     ```

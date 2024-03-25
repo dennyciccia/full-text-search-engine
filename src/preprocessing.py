@@ -8,7 +8,7 @@ LEMMATIZATION = not STEMMING
 nltk.download("punkt", quiet=True)
 nltk.download("stopwords", quiet=True)
 nltk.download('averaged_perceptron_tagger', quiet=True)
-nltk.download('wordnet', quiet=True)
+nltk.download('wordnet',quiet=True)
 
 stop_words = set(nltk.corpus.stopwords.words('english'))
 stemmer = nltk.SnowballStemmer("english")

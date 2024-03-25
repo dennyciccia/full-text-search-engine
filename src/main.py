@@ -24,7 +24,7 @@ def print_results(res):
         print(f"Utenti che l'hanno trovata utile: {r['votes_up']}")
         print(f"Utenti che l'hanno trovata divertente: {r['votes_funny']}")
         print(f"Sentimento rilevato: {r['sentiment']}, score: {r['score_sentiment']}")
-        print(f"Testo recensione: {r['review'].strip()}")
+        print("Testo recensione: ", r['review'].replace('\n', ' '))
         print()
 
 

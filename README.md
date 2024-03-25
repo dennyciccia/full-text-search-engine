@@ -26,14 +26,10 @@ La collezione di documenti è composta da oltre 300.000 recensioni di Steam di B
 
 Le query sono composte da parametri:
 
-* `content`: specifica le parole da cercare (opzionale, obbligatorio se non è presente `sentiment`)
+* `content`: specifica le parole da cercare (opzionale, obbligatorio se non è presente `sentiment`), per cercare una frase esatta si possono mettere le parole tra doppi apici
     ```
-    content: word1 word2 ...
+    content: word1 word2 "phrase1" "phrase2" ...
     ```
-  per cercare una frase esatta si possono mettere le parole tra doppi apici
-  ```
-    content: "phrase1" "phrase2" ...
-  ```
 * `sentiment`: filtra i risultati per il sentimento specificato (opzionale, obbligatorio se non è presente `content`, si possono cercare più sentiment in OR separandoli da spazio)
     ```
     sentiment: anger | disgust | fear | joy | neutral | sadness | surprise

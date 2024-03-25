@@ -32,7 +32,7 @@ Le query sono composte da parametri:
     ```
   per cercare una frase esatta si possono mettere le parole tra doppi apici
   ```
-    content: "phrase"
+    content: "phrase1" "phrase2" ...
   ```
 * `sentiment`: filtra i risultati per il sentimento specificato (opzionale, obbligatorio se non è presente `content`, si possono cercare più sentiment in OR separandoli da spazio)
     ```

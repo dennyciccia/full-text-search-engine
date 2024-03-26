@@ -3,14 +3,10 @@ Progetto per l'esame di Gestione dell'informazione.
 
 ## Informazioni
 
----------------------------------------
-
 Search engine che permette di eseguire ricerche full-text su una collection di documenti.
 La collezione di documenti è composta da oltre 300.000 recensioni di Steam di Baldur's Gate 3.
 
 ## Funzionalità
-
----------------------------------------
 
 * Ricerca full-text su un corpus di documenti
 * Filtraggio per sentiment (rabbia, disgusto, paura, gioia, neutralità, tristezza, sorpresa)
@@ -21,8 +17,6 @@ La collezione di documenti è composta da oltre 300.000 recensioni di Steam di B
 
 
 ## Query language
-
---------------------------
 
 Le query sono composte da parametri:
 
@@ -48,8 +42,6 @@ Le query sono composte da parametri:
     ```
   
 ## Requisiti
-
---------------------------
 
 I requisiti sono elencati nel file `requirements.txt`.
 

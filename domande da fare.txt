@@ -6,3 +6,4 @@
 12- è corretto il word2vec come lo abbiamo implementato noi?
 13- va bene la ricerca solo nel content?
 14- va bene la funzione mode che abbiamo fatto?
+15- come si trovano i documenti rilevanti?

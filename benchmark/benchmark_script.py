@@ -38,3 +38,12 @@ def do_benchmark():
 
 if __name__ == "__main__":
     do_benchmark()
+
+# misure che hanno bisogno di R:
+# - recall e precision
+# - precision at seen relevant documents
+# - F-measure (harmonic mean)
+# - E-measure
+# misure che non hanno bisogno di R:
+# - average precision e mean average precision
+# - DGC

@@ -77,7 +77,7 @@ class InvertedIndex:
 
         # determinazione della query
         if content is not None:
-            content = f" {mode} ".join(content)
+            content = ' '.join(content)
             query_content = QueryParser("content", schema=self.__schema).parse(content)
         if sentiment is not None:
             content = " OR ".join(sentiment.split())

@@ -30,7 +30,7 @@ def get_wordnet_pos(tag):
 
 
 # creazione della sequenza di token per il testo passato come argomento
-def preprocess_document(text):
+def preprocess_document(text, is_query=False):
     # salta le recensioni vuote
     if not isinstance(text, float):
         # Rende minuscolo
@@ -40,7 +40,7 @@ def preprocess_document(text):
         # Rimuove menzioni e hashtag
         text = re.sub(r'@\w+|#\w+', '', text)
         # Rimuove simboli inutili
-        text = re.sub(r'[^a-z0-9 ]+', '', text)
+        text = re.sub(r'[^()|&a-z0-9 ]+', '', text)
 
         # Conversione del testo in token
         text_tokens = nltk.word_tokenize(text)
@@ -56,6 +56,13 @@ def preprocess_document(text):
         if LEMMATIZATION:
             pos_tags = nltk.pos_tag(filtered_tokens)
             filtered_tokens = [lemmatizer.lemmatize(t[0], get_wordnet_pos(t[1])) for t in pos_tags]
+
+        if is_query:
+            for i, v in enumerate(filtered_tokens):
+                if v == '&&':
+                    filtered_tokens[i] = "AND"
+                if v == '||':
+                    filtered_tokens[i] = "OR"
 
         return filtered_tokens
     else:

@@ -1,6 +1,6 @@
 UIN; query; R
 Information about quality of the sidequest and rolepalaing; content: sidequest roleplaying quality, sentiment: neutral, mode: AND; 76086,
-Know what you can do while playing this game (sidequest, exploring, roleplaying, ...); content: sidequest exploring roleplaying things to do "while playing", sentiment: neutral, mode: OR;
+Know what you can do while playing this game (sidequest, exploring, roleplaying, ...); content: "do while playing" (sidequest || exploring || roleplaying), sentiment: neutral, mode: OR; 268582
 Know whether someone liked game's nonhuman nonplayable characters; content: nonhuman nonplayable characters npc, sentiment: joy surprise, mode:OR;
 Know game's graphics problems, issues and bugs; content: problems issues bugs graphics, sentiment: anger sadness disgust, mode: OR;
 Know whether someone found the game physics unrealistic; content: physics unrealistic, sentiment: anger sadness disgust, mode: AND;

@@ -142,7 +142,7 @@ def query_language_menu():
 
             check_query_language(**query)
 
-            query['content'] = pp.preprocess_document(query['content'])
+            query['content'] = pp.preprocess_document(query['content'], is_query=True)
             if 'word2vec' in query.keys() :
                 if query['word2vec'] == 'True':
                     query['content'] = word2vec_expansion(query['content'])

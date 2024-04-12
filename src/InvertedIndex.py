@@ -68,7 +68,7 @@ class InvertedIndex:
         # commit delle modifiche all'indice
         writer.commit()
 
-    def search_documents(self, content=None, sentiment=None, limit=10, mode='AND'):
+    def search_documents(self, content=None, sentiment=None, limit=10):
         # inizializzazione
         limit = int(limit)
         query_content = None
@@ -77,7 +77,6 @@ class InvertedIndex:
 
         # determinazione della query
         if content is not None:
-            content = f" {mode} ".join(content)
             query_content = QueryParser("content", schema=self.__schema).parse(content)
         if sentiment is not None:
             content = " OR ".join(sentiment.split())

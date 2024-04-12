@@ -78,7 +78,7 @@ def search_menu():
 
         elif scelta == '4':
             query = word2vec_expansion(pp.preprocess_document(input("Inserisci la query di ricerca: ")))
-            results = index.search_documents(content=query, limit=reviews_limit, mode='OR')
+            results = index.search_documents(content=query, limit=reviews_limit)
             print_results(results)
 
         elif scelta == '5':
@@ -115,13 +115,11 @@ def sentiment_menu():
             print("Scelta non valida")
 
 
-def check_query_language(content=None, sentiment=None, limit=10, mode='AND', word2vec=None, **kwargs):
+def check_query_language(content=None, sentiment=None, limit=10, word2vec=None, **kwargs):
     if content is None and sentiment is None:
         raise ValueError("Deve essere presente o il content o il sentiment")
     if sentiment is not None and not set(sentiment.split()).issubset({'anger', 'disgust', 'fear', 'joy', 'neutral', 'sadness', 'surprise'}):
         raise ValueError("Sentiment non valido")
-    if mode is not None and mode not in ['AND', 'OR']:
-        raise ValueError("Mode deve essere 'AND' o 'OR'")
     if not isinstance(int(limit), int) or int(limit) <= 0:
         raise ValueError("Limit deve essere un intero positivo")
     if word2vec is not None:
@@ -148,7 +146,6 @@ def query_language_menu():
             if 'word2vec' in query.keys() :
                 if query['word2vec'] == 'True':
                     query['content'] = word2vec_expansion(query['content'])
-                    query['mode'] = 'OR'
                 del query['word2vec']
             results = index.search_documents(**query)
         except (TypeError, ValueError) as e:

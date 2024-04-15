@@ -46,7 +46,11 @@ def do_benchmark():
     df = pd.read_csv(UIN_PATH, header=0, sep=';')
     queries = []
     for _, row in df.iterrows():
-        queries.append((row['query'], row['R']))
+        query = dict((k.strip(), v.strip()) for k, v in (element.split(': ') for element in row['query'].split(', ')))
+
+        queries.append((query, row['R']))
+
+
 
     DCG(index, queries)
 

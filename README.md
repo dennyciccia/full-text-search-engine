@@ -20,11 +20,10 @@ La collezione di documenti è composta da oltre 300.000 recensioni di Steam di B
 
 Le query sono composte da parametri:
 
-* `content`: specifica le parole da cercare (opzionale, obbligatorio se non è presente `sentiment`), 
-   per cercare una frase esatta si possono mettere le parole tra doppi apici, 
+* `content`: specifica le parole da cercare (opzionale, obbligatorio se non è presente `sentiment`),
    per usare l'operatore AND si usano && (default) e per l'operatore OR si usano || (con le parentesi si possono creare query complesse
     ```
-    content: word1 word2 "phrase1" "phrase2" (word3 || word4) && word5
+    content: word1 word2 (word3 || word4) && word5
     ```
 * `sentiment`: filtra i risultati per il sentimento specificato (opzionale, obbligatorio se non è presente `content`, si possono cercare più sentiment in OR separandoli da spazio)
     ```

@@ -57,6 +57,7 @@ def preprocess_document(text, is_query=False):
             pos_tags = nltk.pos_tag(filtered_tokens)
             filtered_tokens = [lemmatizer.lemmatize(t[0], get_wordnet_pos(t[1])) for t in pos_tags]
 
+        # sostituzione simboli AND e OR
         if is_query:
             for i, v in enumerate(filtered_tokens):
                 if v == '&&':

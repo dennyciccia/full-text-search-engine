@@ -1,14 +1,14 @@
 UIN;query;R
-Know what you can do while playing this game (sidequest, exploring, roleplaying, ...);content: do while playing (sidequest || exploring || roleplaying), sentiment: joy neutral, word2vec: True; 268582, 5204, 190665, 218753, 231227, 121064, 124412, 163392
-Know whether someone liked game's nonhuman nonplayable characters;content: nonhuman || (nonplayable characters) || npc, sentiment: joy, word2vec: True; 227740, 33080, 55889
-Know game's graphics problems, issues and bugs;content: problems issues bugs graphics, sentiment: anger sadness disgust, word2vec: True;
-Know whether someone found the game physics unrealistic;content: physics unrealistic, sentiment: anger sadness disgust, word2vec: True;
-Information about game comparison with previews chapters;content: previews chapters, sentiment: neutral, word2vec: True;
-Know if someone found the plot interesting, involving or surprising;content: plot && (interesting || involving || surprising), sentiment: surprise joy, word2vec: True;
-Information about game replayability and if it is as fun as the first run;content: replayability fun as first run, sentiment: joy suprise anger sadness disgust neutral, word2vec: True;
-Some opinions about classes and races in character customization;content: character customization classes races, sentiment: joy surprise anger sadness disgust neutral, word2vec: True;
-Know if there are payments or microtransactions;content: microtransaction || payment, sentiment: neutral, word2vec: True;
-Know whether dungeons and dragons player liked game's dice rolling system;content: d&d dungeons and dragons player dice rolling system, sentiment: joy surprise anger sadness disgust, word2vec: True;
-Know if the character Astarion is a good companion;content: Astarion good companion, sentiment: neutral, word2vec: True;
-Know if someone think that the game is good but it's too long;content: good but too long, sentiment: neutral, word2vec: True;
-Know if this game may be liked by a woman;content: woman like, sentiment: neutral, word2vec: True;
+Know what you can do while playing this game (sidequest, exploring, roleplaying, ...);content: do while playing (sidequest || exploring || roleplaying), sentiment: joy neutral; 268582, 5204, 190665, 218753, 231227, 121064, 124412, 163392
+Know whether someone liked game's nonhuman nonplayable characters;content: nonhuman || (nonplayable characters) || npc, sentiment: joy; 227740, 33080, 55889
+Know game's graphics problems, issues and bugs;content: problems issues bugs graphics, sentiment: anger sadness disgust;
+Know whether someone found the game physics unrealistic;content: physics unrealistic, sentiment: anger sadness disgust;
+Information about game comparison with previews chapters;content: previews chapters, sentiment: neutral;
+Know if someone found the plot interesting, involving or surprising;content: plot && (interesting || involving || surprising), sentiment: surprise joy;
+Information about game replayability and if it is as fun as the first run;content: replayability fun as first run, sentiment: joy suprise anger sadness disgust neutral;
+Some opinions about classes and races in character customization;content: character customization classes races, sentiment: joy surprise anger sadness disgust neutral;
+Know if there are payments or microtransactions;content: microtransaction || payment, sentiment: neutral;
+Know whether dungeons and dragons player liked game's dice rolling system;content: d&d dungeons and dragons player dice rolling system, sentiment: joy surprise anger sadness disgust;
+Know if the character Astarion is a good companion;content: Astarion good companion, sentiment: neutral;
+Know if someone think that the game is good but it's too long;content: good but too long, sentiment: neutral;
+Know if this game may be liked by a woman;content: woman like, sentiment: neutral;

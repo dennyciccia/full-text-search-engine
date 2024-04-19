@@ -12,22 +12,29 @@ def mean_average_precision(index, queries):
     average_precisions_list = []
 
     for i, q in enumerate(queries):
-        print("Query " + str(i + 1) + ": ", ' '.join(q['query']["content"]))
+        print(f"-- Query {i + 1} --")
+        print(f"UIN: {q['UIN']}")
+        print(f"Query originale: {q['fullquery']}")
+        print(f"Query preprocessta: {' '.join(q['query']['content'])}")
         A = index.search_documents(**q['query'])
         relevant_docs = 0
         precisions_list = []
 
         for j, doc in enumerate(A):
-            print("Documento " + str(j+1) + ": ", doc["review"])
+            print(f"\nDocumento {j + 1}:")
+            print(f"ID: {doc['id']}")
+            print("Testo: ", doc['review'].replace('\n', ' '))
             if input("Rilevante? (s/n): ") == 's':
                 relevant_docs += 1
                 precision = relevant_docs / (j + 1)
                 precisions_list.append(precision)
+                print(f"Precision: {precision}")
 
         average_precision = sum(precisions_list) / len(precisions_list) if len(precisions_list) != 0 else 0
         average_precisions_list.append(average_precision)
+        print(f"Average precision per la query {i + 1}: {average_precision}")
 
-    return sum(average_precisions_list) / len(average_precisions_list)
+    return average_precisions_list, sum(average_precisions_list) / len(average_precisions_list)
 
 
 def DCG(index, queries):

@@ -1,12 +1,13 @@
 import os
-from gensim.models import Word2Vec
+
+from word2vec import Word2Vec
 import preprocessing as pp
 import setup
 from InvertedIndex import InvertedIndex
 from config import INDEX_DIR, WORD2VEC_MODEL_PATH
 
 index = None
-word2vec_model = None
+word2vec = None
 
 reviews_limit = 10
 
@@ -39,7 +40,7 @@ def menu():
         scelta = input("Inserisci la tua scelta: ")
 
         if scelta == '1':
-            setup.init_index_and_word2vec(index, word2vec_model, WORD2VEC_MODEL_PATH, force=True)
+            setup.init_index_and_word2vec(index, word2vec.model, force=True)
         elif scelta == '2':
             search_menu()
         elif scelta == '3':
@@ -77,7 +78,7 @@ def search_menu():
             print_results(results)
 
         elif scelta == '4':
-            query = word2vec_expansion(pp.preprocess_document(input("Inserisci la query di ricerca: ")))
+            query = word2vec.expansion(pp.preprocess_document(input("Inserisci la query di ricerca: ")))
             results = index.search_documents(content=query, limit=reviews_limit)
             print_results(results)
 
@@ -143,9 +144,9 @@ def query_language_menu():
             check_query_language(**query)
 
             query['content'] = pp.preprocess_document(query['content'], is_query=True)
-            if 'word2vec' in query.keys() :
+            if 'word2vec' in query.keys():
                 if query['word2vec'] == 'True':
-                    query['content'] = word2vec_expansion(query['content'])
+                    query['content'] = word2vec.expansion(query['content'])
                 del query['word2vec']
             results = index.search_documents(**query)
         except (TypeError, ValueError) as e:
@@ -155,26 +156,12 @@ def query_language_menu():
     print_results(results)
 
 
-def word2vec_expansion(query):
-    expanded_query = []
-    for word in query:
-        try:
-            similar_words = word2vec_model.wv.most_similar(word, topn=3)
-            expanded_query.extend([similar_word for similar_word, _ in similar_words])
-            expanded_query.append(word)
-        except KeyError:
-            # se la parola non è nel vocabolario
-            expanded_query.append(word)
-    return expanded_query
-
-
 if __name__ == "__main__":
     # inizializzazione indice e modello word2vec
     index = InvertedIndex(INDEX_DIR)
-    if os.path.exists(WORD2VEC_MODEL_PATH):
-        word2vec_model = Word2Vec.load(WORD2VEC_MODEL_PATH)
+    word2vec = Word2Vec()
 
-    setup.init_index_and_word2vec(index, word2vec_model, WORD2VEC_MODEL_PATH)
+    setup.init_index_and_word2vec(index, word2vec.model)
     index.open_index()
 
     # menu principale

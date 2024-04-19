@@ -1,11 +1,9 @@
 import math
-
 import pandas as pd
 from src.InvertedIndex import InvertedIndex
 import src.preprocessing as pp
-
-UIN_PATH = "UIN.csv"
-INDEX_DIR = "../data/index"
+from src.word2vec import Word2Vec
+from config import UIN_PATH, INDEX_DIR
 
 
 def mean_average_precision(index, queries):
@@ -34,13 +32,12 @@ def mean_average_precision(index, queries):
         average_precisions_list.append(average_precision)
         print(f"Average precision per la query {i + 1}: {average_precision}")
 
-    return average_precisions_list, sum(average_precisions_list) / len(average_precisions_list)
+    return sum(average_precisions_list) / len(average_precisions_list)
 
 
 def DCG(index, queries):
+    dcg_list = []
     for q in queries:
-        # esecuzione query
-        del q['query']['sentiment']
         results = index.search_documents(**q['query'])
         scores = []
 
@@ -62,33 +59,16 @@ def DCG(index, queries):
                     print("Errore: Per favore inserisci un numero intero.")
 
         # calcolo DCG
-        dcg = 0
-        for i, score in enumerate(scores, start=1):
-            dcg_doc = (2 ** score - 1) / math.log(i + 1)
+        dcg = scores[0]
+        print(f"DCG doc 1: {scores[0]}")
+        for i, score in enumerate(scores[1:], 1):
+            dcg_doc = score / math.log2(i + 1)
             dcg += dcg_doc
-            print(f"DCG doc {i}: {dcg_doc}")
+            print(f"DCG doc {i + 1}: {dcg_doc}")
 
         print(f"DCG totale: {dcg}")
-
-
-def R_qualcosa(index, queries):
-    # array dei documenti rilevanti di tutte le query
-    Ra_tot = []
-
-    # esecuzione delle query e registrazione dei risultati
-    for q, R in queries:
-        query = dict((k.strip(), v.strip()) for k, v in (element.split(': ') for element in q.split(', ')))
-        A = index.search_documents(**query)
-
-        # documenti rilevanti trovati
-        Ra = []
-        for doc in A:
-            if doc in R:
-                Ra.append(doc)
-
-        Ra_tot.append(Ra)
-
-        # da finire ...
+        dcg_list.append(dcg)
+    return dcg_list
 
 
 def do_benchmark():
@@ -103,10 +83,25 @@ def do_benchmark():
     for _, row in df.iterrows():
         query = dict((k.strip(), v.strip()) for k, v in (element.split(': ') for element in row['query'].split(', ')))
         query['content'] = pp.preprocess_document(query['content'], is_query=True)
-        queries.append({'UIN': row['UIN'], 'query': query})
+        queries.append({'UIN': row['UIN'], 'fullquery': row['query'], 'query': query})
 
-    mean_average_precision(index, queries)
-    DCG(index, queries)
+    sentiment_input = input("Calcolare il sentiment? (s/n): ") == 's'
+    word2vec_input = input("Calcolare il word2vec? (s/n): ") == 's'
+
+    word2vec = Word2Vec()
+
+    for q in queries:
+        if not sentiment_input:
+            del q['query']['sentiment']
+        if word2vec_input:
+            q['query']['content'] = word2vec.expansion(q['query']['content'])
+
+    map = mean_average_precision(index, queries)
+    dcg = DCG(index, queries)
+
+    with open("benchmark.csv", 'a') as fd:
+        print(f"sentiment: {sentiment_input}, word2vec: {word2vec_input}; ", file=fd)
+
 
 
 if __name__ == "__main__":

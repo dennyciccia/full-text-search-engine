@@ -1,7 +1,7 @@
 from gensim.models import Word2Vec
 import pandas as pd
 import preprocessing as pp
-from config import DOC_PATH
+from config import DOC_PATH, WORD2VEC_MODEL_PATH
 
 
 def get_documents():
@@ -15,7 +15,7 @@ def get_documents():
     return documents
 
 
-def init_index_and_word2vec(index, word2vec_model, word2_vec_model_path, force=False):
+def init_index_and_word2vec(index, word2vec_model, force=False):
     if force or not index.exists or word2vec_model is None:
         documents = get_documents()
         if force or not index.exists:
@@ -24,4 +24,4 @@ def init_index_and_word2vec(index, word2vec_model, word2_vec_model_path, force=F
         if force or word2vec_model is None:
             print("Addestramento modello word2vec...")
             word2vec_model = Word2Vec([d[1] for d in documents])
-            word2vec_model.save(word2_vec_model_path)
+            word2vec_model.save(WORD2VEC_MODEL_PATH)

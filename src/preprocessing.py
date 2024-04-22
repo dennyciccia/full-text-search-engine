@@ -46,7 +46,7 @@ def preprocess_document(text, is_query=False):
         text_tokens = nltk.word_tokenize(text)
 
         # Rimozione delle stopwords e parole composte da una lettera
-        filtered_tokens = [token for token in text_tokens if token not in stop_words and len(token) > 1]
+        filtered_tokens = [token for token in text_tokens if token not in stop_words or token in ['(',')']]
 
         # Stemming
         if STEMMING:

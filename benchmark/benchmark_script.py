@@ -7,6 +7,8 @@ from config import UIN_PATH, INDEX_DIR
 
 
 def mean_average_precision(index, queries):
+    print("-- Benchmark per Mean Average Precision --")
+
     average_precisions_list = []
 
     for i, q in enumerate(queries):
@@ -36,6 +38,8 @@ def mean_average_precision(index, queries):
 
 
 def DCG(index, queries):
+    print("-- Benchmark per Discounted Cumulative Gain --")
+
     dcg_list = []
     for q in queries:
         results = index.search_documents(**q['query'])
@@ -97,12 +101,16 @@ def do_benchmark():
             q['query']['content'] = word2vec.expansion(q['query']['content'])
 
     map = mean_average_precision(index, queries)
-    dcg = DCG(index, queries)
+    #dcg = DCG(index, queries)
 
-    with open("benchmark.csv", 'a') as fd:
-        print(f"sentiment: {sentiment_input}, word2vec: {word2vec_input}; ", file=fd)
-
-
+    with open("benchmark_MAP.csv", 'a') as fd:
+        print(f"sentiment: {sentiment_input}; word2vec: {word2vec_input}; MAP: {map}", file=fd)
+    """    
+    with open("benchmark_DCG.csv", 'a') as fd:
+        print(f"sentiment: {sentiment_input}; word2vec: {word2vec_input};", file=fd)
+        for dcg in enumerate(dcg):
+            print(f"{dcg}", file=fd)
+    """
 
 if __name__ == "__main__":
     do_benchmark()

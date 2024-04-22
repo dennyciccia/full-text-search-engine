@@ -34,7 +34,7 @@ def mean_average_precision(index, queries):
         average_precisions_list.append(average_precision)
         print(f"Average precision per la query {i + 1}: {average_precision}")
 
-    return sum(average_precisions_list) / len(average_precisions_list)
+    return sum(average_precisions_list) / len(average_precisions_list), average_precisions_list
 
 
 def DCG(index, queries):
@@ -100,15 +100,17 @@ def do_benchmark():
         if word2vec_input:
             q['query']['content'] = word2vec.expansion(q['query']['content'])
 
-    map = mean_average_precision(index, queries)
-    #dcg = DCG(index, queries)
+    map, avpr_list = mean_average_precision(index, queries)
+    #dcg_list = DCG(index, queries)
 
     with open("benchmark_MAP.csv", 'a') as fd:
         print(f"sentiment: {sentiment_input}; word2vec: {word2vec_input}; MAP: {map}", file=fd)
+        for ap in avpr_list:
+            print(f"{avpr_list}", file=fd)
     """    
     with open("benchmark_DCG.csv", 'a') as fd:
         print(f"sentiment: {sentiment_input}; word2vec: {word2vec_input};", file=fd)
-        for dcg in enumerate(dcg):
+        for dcg in dcg_list:
             print(f"{dcg}", file=fd)
     """
 

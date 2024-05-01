@@ -10,5 +10,5 @@ Some opinions about classes and races in character customization;content: (chara
 Know if there are payments or microtransactions;content: in game (microtransaction || payment), sentiment: neutral;
 Know whether dungeons and dragons player liked game's dice rolling system;content: (d&d || dungeons and dragons) player liked dice rolling system, sentiment: joy surprise anger sadness disgust;
 Know if the character Astarion is a good companion;content: Astarion is a good companion, sentiment: neutral;
-Know if someone think that the game is good but it's too long;content: good || but || too || long || too || many || hours, sentiment: neutral;
-Know if this game may be liked by a woman;content: game || woman || (could like), sentiment: neutral;
+Know how long is the game and how many hours you can play;content: how || long || how || many || hours || game, sentiment: neutral;
+Know if this game may be liked by a woman;content: i am woman i like this game, sentiment: neutral;

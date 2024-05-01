@@ -24,7 +24,7 @@ def mean_average_precision(index, queries):
             print(f"\nDocumento {j + 1}:")
             print(f"ID: {doc['id']}")
             print("Testo: ", doc['review'].replace('\n', ' '))
-            if input("Rilevante? (s/n): ") == 's':
+            if input("Rilevante? (s/n): ") in ['s', '1']:
                 relevant_docs += 1
                 precision = relevant_docs / (j + 1)
                 precisions_list.append(precision)
@@ -104,9 +104,9 @@ def do_benchmark():
     #dcg_list = DCG(index, queries)
 
     with open("benchmark_MAP.csv", 'a') as fd:
-        print(f"sentiment: {sentiment_input}; word2vec: {word2vec_input}; MAP: {map}", file=fd)
-        for ap in avpr_list:
-            print(f"{avpr_list}", file=fd)
+        print(f"sentiment: {sentiment_input};word2vec: {word2vec_input};MAP: {map}", file=fd)
+        for i, ap in enumerate(avpr_list):
+            print(f"{i};{ap}", file=fd)
     """    
     with open("benchmark_DCG.csv", 'a') as fd:
         print(f"sentiment: {sentiment_input}; word2vec: {word2vec_input};", file=fd)

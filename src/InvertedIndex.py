@@ -16,6 +16,8 @@ class InvertedIndex:
         self.__schema = Schema(
             id=ID(unique=True, stored=True),
             content=TEXT(stored=False),
+            # content senza stemming
+            # content doc2vec
             review=TEXT(stored=True),
             created=DATETIME(stored=True),
             updated=DATETIME(stored=True),

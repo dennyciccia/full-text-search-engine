@@ -3,7 +3,7 @@ import re
 
 # inizializzazione
 STEMMING = True
-LEMMATIZATION = not STEMMING
+LEMMATIZATION = False
 
 nltk.download("punkt", quiet=True)
 nltk.download("stopwords", quiet=True)

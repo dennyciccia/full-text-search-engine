@@ -30,7 +30,7 @@ def mean_average_precision(index, queries):
                 precisions_list.append(precision)
                 print(f"Precision: {precision}")
 
-        average_precision = sum(precisions_list) / len(precisions_list) if len(precisions_list) != 0 else 0
+        average_precision = (sum(precisions_list) / len(precisions_list)) if len(precisions_list) != 0 else 0
         average_precisions_list.append(average_precision)
         print(f"Average precision per la query {i + 1}: {average_precision}")
 
@@ -106,7 +106,7 @@ def do_benchmark():
     with open("benchmark_MAP.csv", 'a') as fd:
         print(f"sentiment: {sentiment_input};word2vec: {word2vec_input};MAP: {map}", file=fd)
         for i, ap in enumerate(avpr_list):
-            print(f"{i};{ap}", file=fd)
+            print(f"{i+1};{ap}", file=fd)
     """    
     with open("benchmark_DCG.csv", 'a') as fd:
         print(f"sentiment: {sentiment_input}; word2vec: {word2vec_input};", file=fd)

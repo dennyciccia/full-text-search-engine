@@ -41,13 +41,25 @@ def DCG(index, queries):
     print("-- Benchmark per Discounted Cumulative Gain --")
 
     dcg_list = []
-    for q in queries:
+
+    already_valuated = pd.read_csv("DCG/benchmark_DCG_inputs.csv", header=0, sep=';')
+    score_dict = dict(zip(already_valuated['ID'], already_valuated['Score']))
+
+    for i, q in enumerate(queries):
         results = index.search_documents(**q['query'])
         scores = []
 
         print("\nQuery:", q['UIN'], end='\n\n')
         for doc in results:
+            print(f"ID: {doc['id']}")
             print("Review:", doc['review'].replace('\n', ' '))
+
+            # Controlla se la valutazione è già presente nel dizionario
+            if int(doc['id']) in score_dict:
+                score = score_dict[int(doc['id'])]
+                scores.append(score)
+                print(f"Punteggio già presente per l'ID {doc['id']}: {score}\n")
+                continue
 
             # inserimento del voto di rilevanza
             while True:
@@ -61,6 +73,9 @@ def DCG(index, queries):
                         print("Errore: Il punteggio deve essere compreso tra 0 e 3.")
                 except ValueError:
                     print("Errore: Per favore inserisci un numero intero.")
+
+            with open("DCG/benchmark_DCG_inputs.csv", 'a') as fd:
+                print(str(i+1) + ";" + doc['id'] + ";" + str(score), file=fd)
 
         # calcolo DCG
         dcg = scores[0]
@@ -100,19 +115,18 @@ def do_benchmark():
         if word2vec_input:
             q['query']['content'] = word2vec.expansion(q['query']['content'])
 
-    map, avpr_list = mean_average_precision(index, queries)
-    #dcg_list = DCG(index, queries)
+    # map, avpr_list = mean_average_precision(index, queries)
+    # with open("benchmark_MAP.csv", 'a') as fd:
+    #     print(f"sentiment: {sentiment_input};word2vec: {word2vec_input};MAP: {map}", file=fd)
+    #     for i, ap in enumerate(avpr_list):
+    #         print(f"{i+1};{ap}", file=fd)
 
-    with open("benchmark_MAP.csv", 'a') as fd:
-        print(f"sentiment: {sentiment_input};word2vec: {word2vec_input};MAP: {map}", file=fd)
-        for i, ap in enumerate(avpr_list):
-            print(f"{i+1};{ap}", file=fd)
-    """    
-    with open("benchmark_DCG.csv", 'a') as fd:
+    dcg_list = DCG(index, queries)
+    with open("DCG/benchmark_DCG.txt", 'a') as fd:
         print(f"sentiment: {sentiment_input}; word2vec: {word2vec_input};", file=fd)
         for dcg in dcg_list:
             print(f"{dcg}", file=fd)
-    """
+
 
 if __name__ == "__main__":
     do_benchmark()

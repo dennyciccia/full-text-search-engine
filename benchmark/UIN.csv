@@ -3,7 +3,7 @@ Know what you can do while playing this game (sidequest, exploring, roleplaying,
 Know whether someone liked game's nonhuman nonplayable characters;content: nonhuman || (nonplayable characters) || npc, sentiment: joy; 227740, 33080, 55889
 Know game's graphics problems, issues and bugs;content: (problems || issues || bugs || glitches) graphics, sentiment: anger sadness disgust;
 Know whether someone found the game physics unrealistic;content: physics (unrealistic || rough || bad), sentiment: anger sadness disgust;
-Information about game comparison;content: (previews chapters) || (baldur's gate) || (other games) || (compared with), sentiment: neutral;
+Information about game comparison with previous chapters;content: (previews chapters) || (baldur's gate) || (other games) || (compared with), sentiment: neutral;
 Know if someone found the plot interesting, involving or surprising;content: (plot || trama || story) (interesting || involving || surprising), sentiment: surprise joy;
 Information about game replayability and if it is as fun as the first run;content: replayability || (fun as first run), sentiment: joy suprise anger sadness disgust neutral;
 Some opinions about classes and races in character customization;content: (character customization) || classes || races, sentiment: joy surprise anger sadness disgust neutral;

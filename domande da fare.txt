@@ -1,8 +1,0 @@
-6- va bene la sentiment analysis come la abbiamo implementata?
-8- come si può implementare la funzione di ranking nel search engine di base?
-9- quali misure di benchamrk servono?
-10- come si confrontano i benchmark del search engine di base e quello con sentiment analysis che hanno parametri diversi?
-11- come si fa il benchmark?
-12- è corretto il word2vec come lo abbiamo implementato noi?
-13- va bene la ricerca solo nel content?
-14- va bene la funzione mode che abbiamo fatto?

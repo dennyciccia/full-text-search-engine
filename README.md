@@ -15,7 +15,6 @@ La collezione di documenti è composta da oltre 300.000 recensioni di Steam di B
 * Opzione di utilizzare word2vec per la similarità semantica
 * Ricerca di frasi esatte
 
-
 ## Query language
 
 Le query sono composte da parametri:
@@ -37,7 +36,15 @@ Le query sono composte da parametri:
     ```
     word2vec: True | False
     ```
-  
+
+## Istruzioni per l'utilizzo
+
+Per utilizzare il programma eseguire lo script 'src/main.py', la prima volta che si usa verrà costruito l'inverted index (ATTENZIONE: operazione molto lenta).
+Una volta avviato e costruito l'index si possono effettuare ricerche in modo guidato o usando il query language.
+
+Per effettuare i benchmark eseguire lo script 'benchmark/benchmark_script.py', verrà avviato prima il benchmark della Mean Average Precision e poi il benchmark del Discounted Cumultive Gain.
+Tutti i risultati di benchmark vengono salvati su file .csv.
+
 ## Requisiti
 
 I requisiti sono elencati nel file `requirements.txt`.

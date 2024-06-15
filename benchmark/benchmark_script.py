@@ -115,12 +115,14 @@ def do_benchmark():
         if word2vec_input:
             q['query']['content'] = word2vec.expansion(q['query']['content'])
 
-    # map, avpr_list = mean_average_precision(index, queries)
-    # with open("benchmark_MAP.csv", 'a') as fd:
-    #     print(f"sentiment: {sentiment_input};word2vec: {word2vec_input};MAP: {map}", file=fd)
-    #     for i, ap in enumerate(avpr_list):
-    #         print(f"{i+1};{ap}", file=fd)
+    # benchmark Mean Average Precision
+    map, avpr_list = mean_average_precision(index, queries)
+    with open("benchmark_MAP.csv", 'a') as fd:
+         print(f"sentiment: {sentiment_input};word2vec: {word2vec_input};MAP: {map}", file=fd)
+         for i, ap in enumerate(avpr_list):
+             print(f"{i+1};{ap}", file=fd)
 
+    # benchmark Discounted Cumulative Gain
     dcg_list = DCG(index, queries)
     with open("DCG/benchmark_DCG.txt", 'a') as fd:
         print(f"sentiment: {sentiment_input}; word2vec: {word2vec_input};", file=fd)
